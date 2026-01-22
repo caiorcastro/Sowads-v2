@@ -28,51 +28,54 @@ def generate_topics(api_key, count, explicit_theme=None, model_name="gemini-2.5-
     model = genai.GenerativeModel(model_name)
     rules = load_rules()
     
-    # Extract high-level context from rules
-    persona = rules.get("agent_profile", {}).get("primary_directive")
-    compliance = rules.get("legal_and_compliance_mandates", {}).get("claims_and_promises", {})
-    
-    # Construct the Prompt
-    theme_directive = ""
+    # Internal helper to call the API
+    def call_api(qty, focus_context):
+        prompt = f"""
+        ROLE: Editor-in-Chief of a Viral Immigration News Portal.
+        OBJECTIVE: Brainstorm {qty} unique, high-potential article topics.
+        TARGET AUDIENCE: Latin Americans (High Net Worth or Professionals).
+        
+        CONTEXT/FOCUS: {focus_context}
+
+        CRITERIA FOR "HIGH POTENTIAL":
+        1.  **Click-Worthy:** Use emotional hooks (Curiosity, Fear of missing out, Authority).
+        2.  **SEO/AIO Friendly:** Answer specific questions users ask Google/ChatGPT.
+        3.  **Compliance:** DO NOT promise visas. Use terms like "Planejamento", "Possibilidades", "Carreira Internacional".
+        
+        OUTPUT FORMAT (JSON List):
+        [
+            {{
+                "topic_pt": "Title in Portuguese (Brazil)",
+                "topic_es": "Title in Spanish (Latam)",
+                "potential_score": 9.5,
+                "category": "Career/Investment/Family"
+            }}
+        ]
+        
+        Generate exactly {qty} items. Return ONLY the JSON.
+        """
+        try:
+            print(f"{Colors.OKCYAN}   -> Brainstorming {qty} topics for: {focus_context[:40]}...{Colors.ENDC}")
+            response = model.generate_content(prompt, generation_config={"response_mime_type": "application/json"})
+            return json.loads(response.text)
+        except Exception as e:
+            print(f"{Colors.FAIL}Error generating topics: {e}{Colors.ENDC}")
+            return []
+
     if explicit_theme:
-        theme_directive = f"FOCUS THEME: '{explicit_theme}'"
+        # Manual theme -> Single batch
+        return call_api(count, f"Theme: '{explicit_theme}'")
     else:
-        theme_directive = "FOCUS: Analyze the 'knowledge base' implied by an Immigration Firm (EB-2 NIW, Business Visas, Real Estate in US/Dubai) and identify TRENDING, HIGH-INTEREST sub-niches (e.g., Tech Layoffs, Inflation in Latam, Remote Work)."
-
-    prompt = f"""
-    ROLE: Editor-in-Chief of a Viral Immigration News Portal.
-    OBJECTIVE: Brainstorm {count} unique, high-potential article topics.
-    TARGET AUDIENCE: Latin Americans (High Net Worth or Professionals) looking to move to US or Dubai.
-    
-    {theme_directive}
-
-    CRITERIA FOR "HIGH POTENTIAL":
-    1.  **Click-Worthy:** Use emotional hooks (Curiosity, Fear of missing out, Authority).
-    2.  **SEO/AIO Friendly:** Answer specific questions users ask Google/ChatGPT.
-    3.  **Compliance:** DO NOT promise visas. Use terms like "Planejamento", "Possibilidades", "Carreira Internacional".
-    
-    OUTPUT FORMAT (JSON List):
-    [
-        {{
-            "topic_pt": "Title in Portuguese (Brazil)",
-            "topic_es": "Title in Spanish (Latam)",
-            "potential_score": 9.5,
-            "category": "Career/Investment/Family"
-        }},
-        ...
-    ]
-    
-    Generate exactly {count} items. Return ONLY the JSON.
-    """
-
-    print(f"{Colors.OKCYAN}Thinking... (Brainstorming {count} topics){Colors.ENDC}")
-    
-    try:
-        response = model.generate_content(prompt, generation_config={"response_mime_type": "application/json"})
-        return json.loads(response.text)
-    except Exception as e:
-        print(f"{Colors.FAIL}Error generating topics: {e}{Colors.ENDC}")
-        return []
+        # Automated Strategy -> 75% US / 25% Dubai
+        count_us = int(count * 0.75)
+        count_uae = count - count_us
+        
+        print(f"{Colors.HEADER}Strategy: {count_us} US Topics | {count_uae} Dubai Topics{Colors.ENDC}")
+        
+        topics_us = call_api(count_us, "FOCUS: USA Immigration (EB-2 NIW, Green Card, Real Estate in Florida, Business Visas). Trends: Tech layoffs, healthcare shortage, aviation.")
+        topics_uae = call_api(count_uae, "FOCUS: Dubai/UAE Immigration (Golden Visa, Tax-Free Living, Real Estate Investment, Freelance Visas). Trends: Remote work, crypto, safety.")
+        
+        return topics_us + topics_uae
 
 def main():
     print(f"{Colors.HEADER}=== D4U TOPIC CREATOR (AI BRAINSTORM) ==={Colors.ENDC}")
