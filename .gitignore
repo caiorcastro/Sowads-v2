@@ -1,0 +1,12 @@
+# Outputs
+output_artigos/
+output_csv_batches/
+relatorios/
+
+# System
+.DS_Store
+__pycache__/
+*.pyc
+
+# Env
+.env
