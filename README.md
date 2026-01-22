@@ -87,6 +87,19 @@ Os arquivos estarão prontos em `output_csv_batches/`:
 *   `lote_2_artigos_11_a_20.csv` ✅
 *   ...
 
+## 🛡️ Controle de Qualidade (QA Validator)
+Incluímos um script de auditoria para garantir "Nota 100" em compliance.
+
+```bash
+python3 d4u_qa_validator.py
+```
+
+**O que ele verifica?**
+1.  **Proibição de JSON-LD:** Garante que não sobrou nenhum script de FAQ antigo.
+2.  **HTML Structure:** Valida a presença de `<h1>`, `<article lang='es-419'>`.
+3.  **Compliance:** Busca por links proibidos e checa o tamanho do conteúdo.
+4.  **Scoring:** Dá uma nota de 0 a 100 para cada artigo individualmente.
+
 ---
 
 > *"A melhor maneira de prever o futuro é criá-lo."*
