@@ -36,6 +36,7 @@ def optimize_content_with_gemini(model, content, title):
     3. **OPTIMIZATION:** 
        - If the Score is below 9.5, REWRITE sections to improve it.
        - Ensure the "99% Success Rate" rule is followed (it must be ">91%").
+       - **CRITICAL:** DO NOT INCLUDE ANY "<script>" TAGS. NO JSON-LD. NO JS. PURE HTML ONLY.
        - Ensure NO LINKS are present.
        - Ensure Language is strict ES-419 (Latam).
     

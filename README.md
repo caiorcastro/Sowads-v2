@@ -76,7 +76,8 @@ graph TD
 | Arquivo | Função | Status |
 | :--- | :--- | :--- |
 | `d4u_content_engine.py` | **O Criador.** Gera o conteúdo base usando prompts de Cadeia de Densidade. | ✅ Stable |
-| `d4u_optimizer_v2.py` | **O Lapidador.** Audita o conteúdo, remove bugs (como JSON-LD quebrados), converte FAQ para HTML e garante Nota 10 em SEO. | ✅ **NEW** |
+| `d4u_optimizer_v2.py` | **O Lapidador.** Audita o conteúdo, remove bugs (como JSON-LD quebrados), converte FAQ para HTML e garante Nota 10 em SEO. | ✅ Stable |
+| `bing_index_now.py` | **O Canhão (Force Push).** Notifica a Microsoft instantaneamente via API IndexNow a cada nova URL, furando a fila de rastreamento. | ✅ **NEW** |
 | `d4u_qa_validator.py` | **O Auditor.** Garante que nada saia fora de compliance. | ✅ Stable |
 | `d4u_topic_creator.py` | **O Estrategista.** Gera pautas infinitas baseadas em tendências. | ✅ Stable |
 
@@ -105,12 +106,18 @@ Aqui a mágica acontece. O script varre os CSVs gerados, corrige falhas de HTML,
 python3 d4u_optimizer_v2.py --api_key "SUA_KEY"
 ```
 
-### 4. Validação Final
+### 4. Indexação Instantânea (Bing Force Push) ⚡ **NEW**
+Não espere pelo robô. Force a indexação.
+```bash
+python3 bing_index_now.py --api_key "SUA_INDEXNOW_KEY" --host "https://d4uimmigration.com" --urls_file "lista_urls.txt"
+```
+
+### 5. Validação Final
 ```bash
 python3 d4u_qa_validator.py
 ```
 
-### 5. Output Final
+### 6. Output Final
 Os arquivos prontos para upload estarão em:
 `output_csv_batches_v2/*.csv`
 
