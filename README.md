@@ -3,9 +3,9 @@
 > *Não é apenas criação de texto. É ocupação de território digital.*
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-FFE873?style=for-the-badge&logo=python&logoColor=black)](https://python.org)
-[![AI Model](https://img.shields.io/badge/AI_Core-Gemini_1.5_Pro_%2B_Flash-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://deepmind.google/technologies/gemini/)
-[![Compliance](https://img.shields.io/badge/Compliance-99%25_Legal_Safety-success?style=for-the-badge&logo=shield&logoColor=white)](https://d4uimmigration.com)
-[![Multi-Language](https://img.shields.io/badge/Polyglot_Core-EN_%7C_ES_%7C_PT-blueviolet?style=for-the-badge&logo=google-translate&logoColor=white)](https://translate.google.com)
+[![AI Model](https://img.shields.io/badge/Swarm_Intelligence-Gemini_Pro_%2B_Auditors-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://deepmind.google/technologies/gemini/)
+[![Compliance](https://img.shields.io/badge/Google_Compliance-Webmaster_Tools_Strict-success?style=for-the-badge&logo=google-search-console&logoColor=white)](https://developers.google.com/search/docs)
+[![Uniqueness](https://img.shields.io/badge/Uniqueness_Guard-Anti--Plagiarism_Agent-FF0000?style=for-the-badge&logo=shield&logoColor=white)](https://copyleaks.com/)
 [![AIO Score](https://img.shields.io/badge/AIO_Score-98.5%2F100-purple?style=for-the-badge&logo=openai&logoColor=white)](https://www.perplexity.ai/)
 
 ---
@@ -22,13 +22,19 @@ Deixamos de jogar o jogo do layout e passamos a jogar o jogo dos dados. Constru�
 
 ## 🚀 A Revolução AIO: Por Que Vencemos (O Pitch)
 
-A internet mudou. Os usuários não buscam mais links azuis; eles buscam **respostas**. Nosso Engine foi desenhado nativamente para essa nova realidade de "Answer Engines".
+### 1. ⚡ Infraestrutura Agêntica (Swarm Intelligence)
+Não usamos uma IA genérica. Utilizamos uma **Colmeia de Agentes Especializados**:
+*   **Writer Agent:** Cria o conteúdo base com densidade semântica.
+*   **Auditor Agent:** Verifica alucinações jurídicas.
+*   **Uniqueness Guard (O Guardião):** Analisa a similaridade semântica de cada novo post contra todo o banco de dados existente.
+    *   **Regra de Ouro:** Se a similaridade for **>30%**, o agente rejeita o draft e ordena uma reescrita completa com nova abordagem criativa.
+    *   **Resultado:** Conteúdo 100% original, blindado contra penalizações de "Conteúdo Duplicado" do Google.
 
-### 1. ⚡ Taxa de Indexação >90% (O Protocolo "IndexNow")
-Enquanto a concorrência espera semanas pelo robô do Google, nós forçamos a indexação instantaneamente.
-*   **Dados Estruturados (JSON-LD):** Falamos a língua nativa do robô.
-*   **Bing IndexNow API:** Enviamos URLs diretamente para os buscadores assim que são publicadas.
-*   **Resultado:** **Taxa de Indexação >90%** em 48 horas para conteúdo novo.
+### 2. 🛡️ Google Webmaster Compliance Strict
+O "Modo SEO Audit" do sistema não "acha" que está bom. Ele segue estritamente a documentação oficial para desenvolvedores do Google.
+*   **Core Web Vitals Ready:** Estrutura HTML limpa para LCP e CLS perfeitos.
+*   **Semantic HTML5:** Uso rigoroso de `<article>`, `<aside>`, `<figure>` conforme especificação W3C/Google.
+*   **Schema Markup (JSON-LD):** Metadados estruturados que dizem ao Google exatamente o que é o conteúdo, garantindo Rich Snippets.
 
 ```mermaid
 graph LR
@@ -47,16 +53,10 @@ graph LR
     style G fill:#00b300,color:#fff
 ```
 
-### 2. 🎯 Leads de Alta Qualidade (O Usuário "Educado")
+### 3. 🎯 Leads de Alta Qualidade (O Usuário "Educado")
 O SEO tradicional atrai usuários "curiosos" (Topo de Funil). O AIO atrai usuários **"decididos"** (Meio/Fundo de Funil).
 *   **Dominação de Respostas:** A IA responde perguntas complexas (ex: *"Como funciona o EB-2 NIW para médicos?"*) usando nosso conteúdo como fonte.
 *   **Viés de Autoridade:** Quando o Perplexity ou ChatGPT nos cita, o usuário chega já confiando na marca.
-*   **Conversão:** Usuários chegam prontos para comprar, não apenas para ler.
-
-### 3. 🌐 Polyglot Core (Multi-Idioma Nativo)
-Um único codebase, alcance global. O sistema alterna dinamicamente entre contextos culturais e linguísticos.
-*   **Suporte Total:** Inglês 🇺🇸, Espanhol (Latam) 🇪🇸 e Português 🇧🇷.
-*   **Transcreation:** Não é tradução literal. O sistema adapta moedas, termos jurídicos e dores locais para cada mercado alvo.
 
 ---
 
@@ -67,6 +67,9 @@ Nossa arquitetura injeta credibilidade em nível de código.
 *   **Trustworthiness (Confiança):** Compliance jurídico automatizado por IA. Se houver risco ou promessa de visto indevida, o sistema **reescreve** automaticamente.
 *   **Expertise (Especialidade):** Conteúdo técnico profundo sobre EB-2 NIW e Vistos de Investidor. Zero alucinações.
 *   **Human-in-the-Loop Virtual:** O sistema simula um advogado sênior revisando cada parágrafo antes da aprovação final.
+
+### 🌐 Polyglot Core (Multi-Idioma Nativo)
+Um único codebase, alcance global. O sistema alterna dinamicamente entre contextos culturais e linguísticos (EN/ES/PT), realizando **Transcreation** (adaptação cultural), não apenas tradução.
 
 ---
 
@@ -80,15 +83,16 @@ graph TD
     A[Raw CSV Strategy] 
     end
 
-    subgraph CORE_ENGINE ["🔥 CORE ENGINE (Python)"]
-    B(D4U Content Engine) -->|Generate| C{Gemini Pro Vision}
-    C -->|Draft| D[Raw HTML Output]
+    subgraph CORE_ENGINE ["🔥 AGENT SWARM"]
+    B(Writer Agent) -->|Draft| C{Uniqueness Guard}
+    C -- "Similarity >30%" --> B
+    C -- "Original" --> D[Compliance Agent]
     end
 
-    subgraph OPTIMIZER_LAYER ["💎 OPTIMIZER LAYER (AIO)"]
+    subgraph OPTIMIZER_LAYER ["💎 OPTIMIZER LAYER (Google compliance)"]
     D -->|Audit| E(D4U Optimizer v2)
-    E -->|Analisa Score AIO| F{Score > 9.5?}
-    F -- No --> G[Re-Optimize & Polish]
+    E -->|Check Webmaster Guidelines| F{Valid?}
+    F -- No --> G[Fix HTML/Schema]
     G --> E
     F -- Yes --> H[High-Ranked Content]
     end
@@ -100,6 +104,7 @@ graph TD
     end
     
     style B fill:#101820,stroke:#D4AF37,stroke-width:2px,color:#fff
+    style C fill:#FF0000,stroke:#333,stroke-width:2px,color:#fff
     style E fill:#D4AF37,stroke:#333,stroke-width:2px,color:#000
     style J fill:#21759b,stroke:#fff,stroke-width:2px,color:#fff
     style K fill:#ff0000,stroke:#fff,stroke-width:2px,color:#fff
@@ -147,6 +152,7 @@ python3 bing_index_now.py --api_key "SUA_INDEXNOW_KEY" --host "https://d4uimmigr
 ```
 
 ### 5. Validação Final
+Validação final de conformidade.
 ```bash
 python3 d4u_qa_validator.py
 ```
@@ -154,8 +160,7 @@ python3 d4u_qa_validator.py
 ---
 
 ## 🛡️ Defesa e Segurança
-*   **Chaves API:** Nunca hardcoded. Sempre via argumento ou env var.
-*   **Rate & Quota Management:** Otimizado para não estourar o tier gratuito do Gemini, mas preparado para escalar.
+*   **Chaves API:** Nunca hardcoded.
 *   **Git History:** Limpo e auditado.
 
 ---
