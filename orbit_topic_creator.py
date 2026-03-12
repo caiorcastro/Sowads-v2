@@ -23,72 +23,87 @@ def load_rules():
     with open(RULES_PATH, 'r', encoding='utf-8') as f:
         return json.load(f)
 
-def generate_topics(api_key, count, explicit_theme=None, model_name="gemini-2.5-flash"):
+def generate_topics(api_key, count, explicit_theme=None, vertical=None, model_name="gemini-2.5-flash"):
     genai.configure(api_key=api_key)
     model = genai.GenerativeModel(model_name)
     rules = load_rules()
-    
-    # Internal helper to call the API
+
+    brand = rules.get('sowads_brand', {})
+    products = brand.get('products', {})
+    orbit_desc = products.get('orbit_ai', {}).get('description', '')
+    ads_desc = products.get('meta_ads_automation', {}).get('description', '')
+    compliance = rules.get('compliance_rules', {})
+    independence_rule = compliance.get('product_independence', {}).get('rule', '')
+
     def call_api(qty, focus_context):
         prompt = f"""
-        ROLE: Editor-in-Chief of a Viral Immigration News Portal.
-        OBJECTIVE: Brainstorm {qty} unique, high-potential article topics.
-        TARGET AUDIENCE: Latin Americans (High Net Worth or Professionals).
-        
+        ROLE: Editor-chefe de um portal de marketing digital e tecnologia para negócios.
+        OBJECTIVE: Criar {qty} temas únicos e de alto potencial para artigos de blog.
+        TARGET AUDIENCE: Empresários e gestores brasileiros buscando crescimento digital.
+
         CONTEXT/FOCUS: {focus_context}
 
+        SOBRE A SOWADS:
+        - Orbit AI: {orbit_desc}
+        - Automação Meta Ads: {ads_desc}
+
+        REGRA CRÍTICA: {independence_rule}
+
         CRITERIA FOR "HIGH POTENTIAL":
-        1.  **Click-Worthy:** Use emotional hooks (Curiosity, Fear of missing out, Authority).
-        2.  **SEO/AIO Friendly:** Answer specific questions users ask Google/ChatGPT.
-        3.  **Compliance:** DO NOT promise visas. Use terms like "Planejamento", "Possibilidades", "Carreira Internacional".
-        
+        1. **Atrativo:** Use ganchos emocionais (Curiosidade, Urgência, Autoridade, Dados).
+        2. **SEO/AIO Friendly:** Responda perguntas específicas que usuários fazem no Google/ChatGPT.
+        3. **Prático:** Foque em resolver problemas reais de negócios com soluções de marketing digital.
+
         OUTPUT FORMAT (JSON List):
         [
             {{
-                "topic_pt": "Title in Portuguese (Brazil)",
-                "topic_es": "Title in Spanish (Latam)",
+                "topic_pt": "Título em Português (Brasil)",
                 "potential_score": 9.5,
-                "category": "Career/Investment/Family"
+                "category": "SEO/AIO/Meta Ads/Estratégia Digital/Automação",
+                "vertical": "Vertical de negócio alvo (ex: e-commerce, saúde, PME geral)"
             }}
         ]
-        
+
         Generate exactly {qty} items. Return ONLY the JSON.
         """
         try:
-            print(f"{Colors.OKCYAN}   -> Brainstorming {qty} topics for: {focus_context[:40]}...{Colors.ENDC}")
+            print(f"{Colors.OKCYAN}   -> Brainstorming {qty} temas para: {focus_context[:60]}...{Colors.ENDC}")
             response = model.generate_content(prompt, generation_config={"response_mime_type": "application/json"})
             return json.loads(response.text)
         except Exception as e:
-            print(f"{Colors.FAIL}Error generating topics: {e}{Colors.ENDC}")
+            print(f"{Colors.FAIL}Erro gerando temas: {e}{Colors.ENDC}")
             return []
 
     if explicit_theme:
-        # Manual theme -> Single batch
-        return call_api(count, f"Theme: '{explicit_theme}'")
+        context = f"Tema: '{explicit_theme}'"
+        if vertical:
+            context += f" | Vertical: {vertical}"
+        return call_api(count, context)
     else:
-        # Automated Strategy -> 75% US / 25% Dubai
-        count_us = int(count * 0.75)
-        count_uae = count - count_us
-        
-        print(f"{Colors.HEADER}Strategy: {count_us} US Topics | {count_uae} Dubai Topics{Colors.ENDC}")
-        
-        topics_us = call_api(count_us, "FOCUS: USA Immigration (EB-2 NIW, Green Card, Real Estate in Florida, Business Visas). Trends: Tech layoffs, healthcare shortage, aviation.")
-        topics_uae = call_api(count_uae, "FOCUS: Dubai/UAE Immigration (Golden Visa, Tax-Free Living, Real Estate Investment, Freelance Visas). Trends: Remote work, crypto, safety.")
-        
-        return topics_us + topics_uae
+        # Default: 60% SEO/AIO + 40% Meta Ads
+        count_seo = max(1, int(count * 0.6))
+        count_ads = count - count_seo
+
+        vertical_ctx = f" para a vertical: {vertical}" if vertical else " para PMEs e empresas de médio porte"
+
+        print(f"{Colors.HEADER}Estratégia: {count_seo} temas SEO/AIO | {count_ads} temas Meta Ads{Colors.ENDC}")
+
+        topics_seo = call_api(count_seo, f"FOCO: SEO, AIO (Artificial Intelligence Optimization), conteúdo estratégico, autoridade digital, posicionamento orgânico{vertical_ctx}. Tendências: IA generativa, GEO, E-E-A-T, conteúdo para LLMs.")
+        topics_ads = call_api(count_ads, f"FOCO: Automação de campanhas Meta Ads, gestão de mídia paga, escala operacional{vertical_ctx}. Tendências: automação, conexão com bancos de dados, campanhas com poucos cliques.")
+
+        return topics_seo + topics_ads
 
 def main():
     print(f"{Colors.HEADER}=== ORBIT AI TOPIC CREATOR (AI BRAINSTORM) ==={Colors.ENDC}")
-    
-    # Interactive or Args
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--api_key", required=True)
     parser.add_argument("--count", type=int, default=0)
     parser.add_argument("--theme", type=str, default="")
+    parser.add_argument("--vertical", type=str, default="", help="Vertical de negócio (ex: e-commerce, saúde, PME)")
     parser.add_argument("--auto_save", action="store_true")
     args = parser.parse_args()
 
-    # Interactive Mode
     count = args.count
     if count == 0:
         try:
@@ -96,34 +111,31 @@ def main():
             count = int(c_input) if c_input.strip() else 10
         except:
             count = 10
-            
+
     theme = args.theme
     if not theme and not args.auto_save:
-        theme = input(f"{Colors.BOLD}Algum assunto específico? (Deixe em branco para usar a Base de Conhecimento): {Colors.ENDC}")
+        theme = input(f"{Colors.BOLD}Algum assunto específico? (Deixe em branco para usar estratégia automática): {Colors.ENDC}")
 
-    # Generate
-    topics_list = generate_topics(args.api_key, count, theme)
-    
+    topics_list = generate_topics(args.api_key, count, theme, args.vertical)
+
     if not topics_list:
-        print("No topics generated.")
+        print("Nenhum tema gerado.")
         return
 
-    # Create DataFrame
     df = pd.DataFrame(topics_list)
-    
-    # Display Preview
-    print(f"\n{Colors.OKGREEN}Generated {len(df)} themes:{Colors.ENDC}")
-    print(df[['topic_pt', 'category']].head(5).to_string(index=False))
-    print("...")
 
-    # Save
+    print(f"\n{Colors.OKGREEN}Gerados {len(df)} temas:{Colors.ENDC}")
+    print(df[['topic_pt', 'category']].head(5).to_string(index=False))
+    if len(df) > 5:
+        print("...")
+
     timestamp = datetime.now().strftime("%Y%m%d_%H%M")
     filename = f"sugestao_temas_{timestamp}.csv"
     output_path = os.path.join("relatorios", filename)
-    
+
     if not os.path.exists("relatorios"):
         os.makedirs("relatorios")
-        
+
     df.to_csv(output_path, index=False, quoting=csv.QUOTE_ALL)
     print(f"\n{Colors.OKBLUE}Arquivo salvo em: {output_path}{Colors.ENDC}")
     print(f"Abra este arquivo, selecione os melhores e coloque na lista de produção!")

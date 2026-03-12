@@ -82,19 +82,27 @@
         },
         "block_2_wordpress_editor_package": {
             "format": "Bloco de código HTML.",
-            "content": "Gerar um único pacote HTML para colar no editor de texto/código do WordPress. Deve iniciar com <article lang=\"pt-BR\"> e finalizar com </article>. NÃO USAR JAVASCRIPT/JSON-LD. O FAQ deve ser HTML puro.",
+            "content": "Gerar um único pacote HTML para colar no editor de texto/código do WordPress. Deve iniciar com <article lang=\"pt-BR\"> e finalizar com </article>. O FAQ deve ter HTML visual E JSON-LD FAQPage schema para Google rich results.",
             "required_structure_example": [
                 "<article lang=\"pt-BR\">",
-                "  <h1>Título principal</h1>",
-                "  <p>Conteúdo do artigo...</p>",
+                "  <h1>Título principal (máx 60 chars)</h1>",
+                "  <p>Primeiro parágrafo com keyword primária + contexto do problema + promessa do artigo.</p>",
+                "  <h2>Seção principal</h2>",
+                "  <p>Conteúdo com respostas diretas no início de cada seção.</p>",
+                "  <table><thead><tr><th>Critério</th><th>Opção A</th><th>Opção B</th></tr></thead><tbody><tr><td>...</td><td>...</td><td>...</td></tr></tbody></table>",
+                "  <ul><li>Item de lista</li></ul>",
                 "  <section class=\"faq-section\">",
                 "    <h2>Perguntas frequentes</h2>",
-                "    <h3>Pergunta 1</h3>",
+                "    <h3>Pergunta 1?</h3>",
                 "    <p>Resposta 1</p>",
-                "    <h3>Pergunta 2</h3>",
+                "    <h3>Pergunta 2?</h3>",
                 "    <p>Resposta 2</p>",
                 "  </section>",
-                "</article>"
+                "  <p><strong>Fale com o time Sowads e comece a escalar sua autoridade digital.</strong></p>",
+                "</article>",
+                "<script type=\"application/ld+json\">",
+                "{\"@context\":\"https://schema.org\",\"@type\":\"FAQPage\",\"mainEntity\":[{\"@type\":\"Question\",\"name\":\"Pergunta 1?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Resposta 1\"}},{\"@type\":\"Question\",\"name\":\"Pergunta 2?\",\"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"Resposta 2\"}}]}",
+                "</script>"
             ]
         }
     },
@@ -109,17 +117,32 @@
         "prohibit_bracket_citations": "PROIBIDO inserir marcadores entre colchetes (ex.: [cite], [cite: 5])."
     },
     "advanced_seo_and_nlp_rules": {
-        "_comment": "Regras SEO e NLP para PT-BR.",
+        "_comment": "Regras SEO, NLP e AIO para PT-BR — best practices 2026.",
         "keyword_strategy": {
-            "primary_keyword": "Usar no H1, Meta Title, Meta Description e primeiro parágrafo, em PT-BR.",
-            "secondary_keywords": "2-4 palavras/frases secundárias distribuídas naturalmente.",
-            "keyword_density": "0,5%–1,0% (sempre priorizar naturalidade)."
+            "primary_keyword": "Usar no H1, Meta Title, Meta Description, primeiro parágrafo e pelo menos 1 H2.",
+            "primary_keyword_density": "0.5% a 4.0% — faixa ampla para manter linguagem natural. Ideal: 1-2%.",
+            "secondary_keywords": "3-5 variações semânticas distribuídas naturalmente.",
+            "long_tail_keywords": "Incluir pelo menos 2 long-tail no corpo do artigo.",
+            "stuffing_prevention": "Se densidade > 4%, reescrever substituindo por sinônimos ou termos LSI.",
+            "natural_language_rule": "SEMPRE traduzir termos técnicos em inglês para expressões naturais em pt-BR. Ex: 'keyword density' → 'densidade de palavras-chave', 'bounce rate' → 'taxa de rejeição'. Manter o termo original entre parênteses na primeira menção apenas. O texto deve soar como conversa entre profissionais brasileiros."
         },
         "semantic_enrichment_lsi": {
-            "rule": "Adicionar termos LSI relevantes à vertical do artigo. Exemplos: marketing digital, automação, ROI, conversão, funil, autoridade digital, posicionamento orgânico."
+            "rule": "Incluir pelo menos 10 termos LSI relacionados ao tema principal. Exemplos: marketing digital, automação, ROI, conversão, funil, autoridade digital, posicionamento orgânico, tráfego qualificado, lead, engajamento."
         },
         "named_entity_recognition_ner": {
-            "rule": "Destacar entidades relevantes: 'Sowads', 'Orbit AI', 'Meta Ads', 'Google', 'WordPress', e entidades específicas da vertical tratada."
+            "rule": "Mencionar pelo menos 8 entidades nomeadas por artigo. Entidades relevantes: 'Sowads', 'Orbit AI', 'Meta Ads', 'Google', 'WordPress', 'ChatGPT', 'Gemini', 'Perplexity', e entidades específicas da vertical tratada."
+        },
+        "aio_optimization_rules": {
+            "_comment": "Regras para otimização em motores de IA generativa (ChatGPT, Gemini, Perplexity).",
+            "direct_answers": "Cada H2 deve começar com 1-2 frases que respondem diretamente à pergunta implícita do heading. Formato 'definição primeiro' para que LLMs extraiam a resposta.",
+            "entity_density": "Entidades ajudam LLMs a contextualizar. Distribuir menções naturalmente ao longo do texto.",
+            "semantic_clarity": "Linguagem clara e sem ambiguidade. Evitar jargão desnecessário. IA interpreta melhor texto direto.",
+            "faq_as_training_data": "FAQ deve conter perguntas reais que usuários fariam ao ChatGPT/Gemini/Perplexity — formato pergunta-resposta direta.",
+            "structured_data": "JSON-LD FAQPage obrigatório para Google rich results E para que IAs identifiquem Q&A pairs.",
+            "topic_completeness": "Cobrir o tema de forma exaustiva: definição, benefícios, como fazer, erros comuns, exemplos, comparações.",
+            "citation_worthy": "Incluir dados, estatísticas ou exemplos concretos que IAs possam citar como fonte.",
+            "conversational_tone": "Tom natural que soa bem quando lido por assistente de voz ou citado por IA.",
+            "summary_paragraph": "Incluir parágrafo resumo no início ou final que sintetize o artigo em 2-3 frases — formato ideal para snippets de IA."
         },
         "international_targeting": {
             "article_lang_attribute": "Sempre lang='pt-BR' em <article>.",
@@ -127,7 +150,7 @@
         }
     },
     "content_quality_and_humanization": {
-        "_comment": "Framework E-E-A-T adaptado para Sowads.",
+        "_comment": "Framework E-E-A-T adaptado para Sowads + regras de conteúdo rico.",
         "eeat_framework": {
             "experience": "Exemplos práticos de negócios brasileiros, cases de verticais específicas.",
             "expertise": "Conceitos de marketing digital, SEO, AIO explicados com clareza e sem jargão desnecessário.",
@@ -135,7 +158,21 @@
             "trustworthiness": "Transparência sobre resultados, uso de dados e métricas quando disponíveis."
         },
         "readability_targets": {
-            "rule": "Frases de 15–20 palavras; parágrafos de 2–4 frases; subtítulos frequentes."
+            "rule": "Frases máx 25 palavras; parágrafos máx 4 linhas; subtítulos frequentes. Flesch-Kincaid adaptado pt-BR: nível médio."
+        },
+        "content_richness_rules": {
+            "comparative_tables": "Incluir tabelas comparativas (<table> com <thead> e <tbody>) sempre que o tema envolver comparação de ferramentas, estratégias, métricas ou cenários antes/depois.",
+            "lists": "Usar listas com marcadores (<ul><li>) para enumerações e listas ordenadas (<ol><li>) para processos passo-a-passo ou rankings.",
+            "visual_hierarchy": "Alternar entre parágrafos, listas, tabelas e citações em destaque para manter a leitura fluida e orgânica.",
+            "opening_variety": "NUNCA iniciar dois artigos da mesma forma. Variar entre: pergunta provocativa, estatística impactante, cenário do leitor, afirmação ousada, analogia criativa.",
+            "subtle_cta": "Encerrar com um CTA natural e não-agressivo. Convite para conhecer mais ou conversar com a equipe Sowads. Sem linguagem de vendas forçada."
+        },
+        "technical_seo_reinforced": {
+            "heading_hierarchy": "H1(1 único) → H2(4-7 seções) → H3(sub-seções). NUNCA pular nível (H1→H3 sem H2).",
+            "meta_title_formula": "[Keyword Primária] + [Benefício ou Gancho] — máx 60 chars.",
+            "meta_description_formula": "[Resumo do valor] + [CTA implícito] — máx 155 chars, incluir keyword primária.",
+            "first_paragraph_rule": "Primeiras 100 palavras DEVEM conter: keyword primária + contexto do problema + promessa do artigo.",
+            "image_alt_ready": "Sugerir alt text para pelo menos 2 imagens hipotéticas relevantes ao tema."
         }
     },
     "content_creation_workflow": {
@@ -194,7 +231,7 @@
             "meta_description_tag": "Máx 155 caracteres."
         },
         "faq_schema_generation": {
-            "instruction": "PROIBIDO JSON-LD. Gerar FAQ usando tags HTML <h3> para perguntas e <p> para respostas."
+            "instruction": "Gerar FAQ com DUAS representações: (1) HTML visual dentro de <section class='faq-section'> com <h3> para perguntas e <p> para respostas; (2) Um bloco <script type='application/ld+json'> com FAQPage schema markup APÓS o </article>, para rich results no Google e identificação por IAs."
         },
         "html_attributes": {
             "article_lang": "Obrigatório lang='pt-BR' em <article>.",
