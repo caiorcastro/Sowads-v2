@@ -108,6 +108,7 @@ def generate_prompt(topic, rules_json):
     2. Bloco 1: Meta Title (máx {tech_seo.get('character_limits', {}).get('meta_title_tag', '60 chars')}) & Meta Description (máx {tech_seo.get('character_limits', {}).get('meta_description_tag', '155 chars')}) em texto plano.
     3. Bloco 2: Conteúdo HTML iniciando com <article lang="pt-BR"> e terminando com </article>.
     4. NENHUM LINK permitido no texto. Zero tags <a href>.
+    PROIBIDO: NÃO incluir NENHUMA tag <img>. Zero imagens. Sem placeholders, sem example.com, sem URLs de imagem.
     5. {tech_seo.get('faq_schema_generation', {}).get('instruction', 'FAQ em HTML puro.')}
     6. Hierarquia: um único H1 (máx {tech_seo.get('character_limits', {}).get('h1_tag', '60 chars')}); H2/H3 para seções.
     7. O bloco JSON-LD <script type="application/ld+json"> com FAQPage DEVE vir DEPOIS do </article>.
@@ -147,6 +148,12 @@ def parse_response(response_text):
     match_html = re.search(r'(<article.*?</article>)', response_text, re.DOTALL)
     if match_html:
         post_content = match_html.group(1)
+
+    # Strip any <img> tags (Gemini sometimes adds placeholder images)
+    post_content = re.sub(r'<figure[^>]*>\s*<img[^>]*/?>[\s\S]*?</figure>', '', post_content)
+    post_content = re.sub(r'<p[^>]*>\s*<img[^>]*/?>[\s\S]*?</p>', '', post_content)
+    post_content = re.sub(r'<img[^>]*/?>',  '', post_content)
+    post_content = re.sub(r'<p[^>]*>\s*</p>', '', post_content)
 
     # Capture JSON-LD block and append
     match_jsonld = re.search(r'(<script type="application/ld\+json">.*?</script>)', response_text, re.DOTALL)
