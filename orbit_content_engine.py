@@ -9,6 +9,7 @@ import warnings
 from datetime import datetime
 import google.generativeai as genai
 import pandas as pd
+from orbit_publisher import CATEGORY_KEYWORDS, FALLBACK_CATEGORY
 
 # Suppress warnings
 warnings.filterwarnings("ignore")
@@ -461,6 +462,31 @@ def generate_report(batch_data, batch_num, model_name, timestamp):
     return report_path
 
 
+def suggest_category(title, content):
+    """Suggest a category name based on article title and content.
+    Uses the same keyword mapping as orbit_publisher.py for consistency."""
+    plain_text = re.sub(r'<[^>]+>', ' ', content).lower()
+    title_lower = title.lower()
+    search_text = f"{title_lower} {title_lower} {title_lower} {plain_text}"
+
+    scores = {}
+    for cat_name, keywords in CATEGORY_KEYWORDS.items():
+        score = 0
+        for kw in keywords:
+            count = search_text.count(kw.lower())
+            if count > 0:
+                weight = len(kw.split())
+                score += count * weight
+        scores[cat_name] = score
+
+    if scores:
+        best = max(scores, key=scores.get)
+        if scores[best] > 0:
+            return best
+
+    return FALLBACK_CATEGORY
+
+
 def main():
     parser = argparse.ArgumentParser(description="Orbit AI Content Engine v2 (CSV Batch + Self-Healing)")
     parser.add_argument("--api_key", help="Google Gemini API Key", required=True)
@@ -551,6 +577,9 @@ def main():
                 # Analyze for report
                 analysis = analyze_article(healed_content, meta_title, meta_desc)
 
+                # Suggest category based on content
+                cat_suggestion = suggest_category(topic, healed_content)
+
                 row = {
                     'unique_import_id': f"Orbit_{global_idx}",
                     'post_title': topic,
@@ -564,6 +593,7 @@ def main():
                     'original_theme': topic,
                     'qa_score': final_score,
                     'heal_retries': retries,
+                    'suggested_category': cat_suggestion,
                     '_analysis': analysis,
                     '_issues': [iss for iss in issues]
                 }
