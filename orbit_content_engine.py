@@ -124,12 +124,20 @@ def generate_prompt(topic, rules_json):
     - Word count: 1200-2500 palavras.
     - CTA: {loc_settings.get('cta_text', '')}
 
+    ESTILO DO FAQ (OBRIGATÓRIO):
+    A seção FAQ DEVE usar inline styles para visual de caixa sutil:
+    <section class="faq-section" style="background:#f8f9fa;border:1px solid #e2e2e2;border-radius:8px;padding:24px 28px;margin-top:32px;font-size:0.92em;line-height:1.6">
+      <h2>Perguntas Frequentes</h2>
+      <h3 style="margin-top:18px;margin-bottom:6px;font-size:1.05em;color:#1a1a1a">Pergunta?</h3>
+      <p style="margin-top:0;color:#444">Resposta.</p>
+    </section>
+
     FORMATO DA RESPOSTA (EXATO):
     Meta Title: [título aqui, máx 60 chars]
     Meta Description: [descrição aqui, máx 155 chars]
 
     <article lang="pt-BR">
-    [conteúdo HTML completo aqui, incluindo FAQ section]
+    [conteúdo HTML completo aqui, incluindo FAQ section com inline styles acima]
     </article>
     <script type="application/ld+json">
     [JSON-LD FAQPage aqui]
