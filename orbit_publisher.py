@@ -58,6 +58,15 @@ CATEGORY_KEYWORDS = {
 # Fallback category when no keyword match is found
 FALLBACK_CATEGORY = "Estratégia e Performance"
 
+# Mapeamento do nome no CSV de temas → nome exato no WordPress
+CATEGORY_CSV_TO_WP = {
+    "SEO & AIO":               "SEO e AI-SEO",
+    "Conteúdo":                "Conteúdo em Escala",
+    "Estratégia e Performance": "Estratégia e Performance",
+    "Mídia Paga":              "Mídia Paga",
+    "Data e Analytics":        "Dados e Analytics",
+}
+
 
 class Colors:
     HEADER = '\033[95m'
@@ -448,9 +457,17 @@ def main():
         elif args.no_category:
             cat_id = None
             cat_name = "-"
-        elif d.get('suggested_category') and d['suggested_category'] in categories_map:
-            cat_id = categories_map[d['suggested_category']]['id']
-            cat_name = d['suggested_category']
+        elif d.get('suggested_category'):
+            # Tenta mapeamento direto CSV → WP, depois nome exato, depois keyword detection
+            wp_name = CATEGORY_CSV_TO_WP.get(d['suggested_category'], d['suggested_category'])
+            if wp_name in categories_map:
+                cat_id = categories_map[wp_name]['id']
+                cat_name = wp_name
+            elif d['suggested_category'] in categories_map:
+                cat_id = categories_map[d['suggested_category']]['id']
+                cat_name = d['suggested_category']
+            else:
+                cat_id, cat_name = detect_category(d['title'], d['content'], categories_map)
         elif categories_map:
             cat_id, cat_name = detect_category(d['title'], d['content'], categories_map)
         else:

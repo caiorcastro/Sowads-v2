@@ -692,10 +692,15 @@ def main():
 
     df_topics = pd.read_csv(csv_path)
     topics = []
+    topic_categories = {}  # topic_text → category string from input CSV
     for _, row in df_topics.iterrows():
         t = row.get('topic_pt') or row.get('topic_es') or row.get('Localized_ES_Draft') or row.get('Original_PT')
         if pd.notna(t) and str(t).strip():
-            topics.append(str(t).strip())
+            t = str(t).strip()
+            topics.append(t)
+            cat = row.get('category', '')
+            if pd.notna(cat) and str(cat).strip():
+                topic_categories[t] = str(cat).strip()
 
     print(f"{Colors.OKCYAN}[INFO] Carregados {len(topics)} temas de {csv_path}{Colors.ENDC}")
 
@@ -762,7 +767,7 @@ def main():
                     'original_theme':    topic,
                     'qa_score':          final_score,
                     'heal_retries':      retries,
-                    'suggested_category': cat_suggestion,
+                    'suggested_category': topic_categories.get(topic, cat_suggestion),
                     'img_blog':          images.get('blog', ''),
                     'img_linkedin':      images.get('linkedin', ''),
                     'img_instagram':     images.get('instagram', ''),
