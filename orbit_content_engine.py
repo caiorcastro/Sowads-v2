@@ -325,13 +325,18 @@ def parse_response(response_text):
     # Remove qualquer bloco <script> do conteúdo (JSON-LD não é mais usado)
     post_content = re.sub(r'<script\b[^>]*>[\s\S]*?</script>', '', post_content)
 
+    # Remove markdown bold (**texto**) — não deve aparecer em HTML
+    post_content = re.sub(r'\*\*(.+?)\*\*', r'\1', post_content, flags=re.DOTALL)
+
     match_meta_t = re.search(r'Meta Title:\s*(.*)', response_text)
     if match_meta_t:
         meta_title = match_meta_t.group(1).strip()
+        meta_title = re.sub(r'\*\*(.+?)\*\*', r'\1', meta_title)
 
     match_meta_d = re.search(r'Meta Description:\s*(.*)', response_text)
     if match_meta_d:
         meta_desc = match_meta_d.group(1).strip()
+        meta_desc = re.sub(r'\*\*(.+?)\*\*', r'\1', meta_desc)
 
     return post_content, meta_title, meta_desc
 
